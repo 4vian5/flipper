@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Flip Flop Store</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .footer {
+            margin-top: auto;
+        }
+
+        .status-container {
+            text-align: center;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        .status-box {
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .flag-box {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }
+
+        .message-box {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Flip Flop Store</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/status">Get Status</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Get Status Page -->
+    <div class="container status-container">
+        <h1 class="display-4">Get Status Page</h1>
+
+        <!-- Token Input -->
+        <div class="form-group">
+            <label for="token">Enter Token</label>
+            <input type="text" class="form-control" id="token" name="token" required>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="getStatus()">Check Status</button>
+
+        <!-- Status Box Container -->
+        <div id="statusBoxContainer" class="status-box"></div>
+    </div>
+        <!-- Registration Information and Security Message -->
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <p>Registration and information are secured using military-grade AES-CBC encryption.</p>
+            <p>&copy; 2023 Registration Portal</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function getStatus() {
+            // Get the token from the input field
+            const token = document.getElementById('token').value;
+
+            // Mock server URL for status
+            const serverURL = '/status';
+
+            // Simulating a POST request using fetch
+            fetch(serverURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: token,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the status in a box
+                const statusBoxContainer = document.getElementById('statusBoxContainer');
+                if (data.msg && /flag\{.*\}/.test(data.msg)) {
+                    // If the response contains a flag
+                    statusBoxContainer.innerHTML = `<div class="flag-box">
+                                                        <p>Flag Found!</p>
+                                                        <p>${data.msg}</p>
+                                                        <p>OH I wasn't expecting our admin to check the status page.</p>
+                                                    </div>`;
+                } else {
+                    // If the response doesn't contain a flag
+                    statusBoxContainer.innerHTML = `<div class="message-box">
+                                                        <p>${data.msg}</p>
+                                                    </div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+
+</html>
