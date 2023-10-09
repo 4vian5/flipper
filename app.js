@@ -20,8 +20,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
   app.post('/register', (req, res) => {
     try{
+      const blacklist = ['1', 'admin', 'admin=1', 'admin=0']
+
       const username = req.body.username
-      const password = req.body.password
+
+      if(blacklist.some(word => username.includes(word))){
+        return res.json({msg: "Please don't hack us. We are a small startup. What did we ever do to you"});
+      }
+
+      const password = req.body.password || "password";
 
       const token = "password="+ password + "&admin=0&user=" + username;
 
