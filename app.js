@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
         return res.json({msg: "Please don't hack us. We are a small startup. What did we ever do to you"});
       }
 
-      const password = req.body.password || "password";
+      const password = "password";
 
       const token = "password="+ password + "&admin=0&user=" + username;
 
